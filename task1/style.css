@@ -1,0 +1,441 @@
+/* =========================================================
+   1. Сброс и базовые настройки
+   ========================================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* =========================================================
+   2. Цветовые токены (светлая тема по умолчанию)
+   ========================================================= */
+
+:root {
+  --bg: #f3f5f1;
+  --bg-alt: #ffffff;
+  --text: #1a2333;
+  --text-muted: #5b6472;
+  --accent: #2f55d4;
+  --accent-soft: #e4eafb;
+  --border: #d9ded9;
+
+  --font-heading: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+
+  --radius-pill: 999px;
+  --radius-panel: 6px;
+  --transition: 0.25s ease;
+}
+
+/* Тёмная тема — включается ЧЕКБОКСОМ, без единой строчки JavaScript.
+   :has() позволяет стилизовать body в зависимости от состояния чекбокса где-то внутри него. */
+body:has(#theme-toggle:checked) {
+  --bg: #10141c;
+  --bg-alt: #1a1f2b;
+  --text: #e7eaf2;
+  --text-muted: #98a0b4;
+  --accent: #7089ff;
+  --accent-soft: #1c2440;
+  --border: #262c3b;
+}
+
+/* Чекбокс скрыт, но остаётся в DOM и переключается кликом по <label for="theme-toggle"> */
+.sr-toggle {
+  display: none;
+}
+
+/* =========================================================
+   3. Базовые стили страницы
+   ========================================================= */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  transition: background var(--transition), color var(--transition);
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Видимый фокус для клавиатурной навигации */
+a:focus-visible,
+.theme-switch:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* =========================================================
+   4. Навигация
+   ========================================================= */
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 20px 6vw;
+  background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav__brand {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.3rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  list-style: none;
+}
+
+.nav__list a {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: color var(--transition);
+}
+
+.nav__list a:hover {
+  color: var(--accent);
+}
+
+/* --- Переключатель темы: чистый Flexbox, без position: absolute --- */
+
+.theme-switch {
+  cursor: pointer;
+}
+
+.theme-track {
+  display: flex;
+  align-items: center;
+  width: 60px;
+  height: 30px;
+  padding: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+}
+
+.theme-icon {
+  font-size: 0.8rem;
+  line-height: 1;
+  opacity: 0.35;
+  transition: opacity var(--transition);
+}
+
+.theme-icon:first-child {
+  opacity: 1;
+}
+
+body:has(#theme-toggle:checked) .theme-icon:first-child {
+  opacity: 0.35;
+}
+
+body:has(#theme-toggle:checked) .theme-icon:last-child {
+  opacity: 1;
+}
+
+.theme-knob {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--accent);
+  margin-right: auto;
+  transition: margin var(--transition), background var(--transition);
+}
+
+body:has(#theme-toggle:checked) .theme-knob {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* =========================================================
+   5. Шапка / герой
+   ========================================================= */
+
+.header__hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 40px;
+  padding: 64px 6vw 80px;
+  /* Лёгкая "миллиметровка" на фоне — отсылка к сетке, которую верстальщик строит во Flexbox/Grid */
+  background-image: radial-gradient(var(--border) 1px, transparent 1px);
+  background-size: 24px 24px;
+  animation: hero-in 0.7s ease both;
+}
+
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.avatar {
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--bg-alt);
+  box-shadow: 0 8px 24px rgba(26, 35, 51, 0.18);
+  transition: transform var(--transition);
+}
+
+.avatar:hover {
+  transform: scale(1.05) rotate(-2deg);
+}
+
+.header__text h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.6vw, 2.9rem);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.header__role {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 6px;
+}
+
+.header__slogan {
+  color: var(--text-muted);
+  max-width: 46ch;
+}
+
+/* =========================================================
+   6. Общие секции
+   ========================================================= */
+
+.section {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 56px 6vw;
+}
+
+.section h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin-bottom: 24px;
+}
+
+.about__text {
+  color: var(--text-muted);
+  max-width: 65ch;
+  font-size: 1.05rem;
+}
+
+.about__text code {
+  font-family: monospace;
+  background: var(--accent-soft);
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* --- Образование: вертикальный список с разделителями --- */
+
+.timeline {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.timeline__item {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 18px 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.timeline__item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.timeline__year {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--accent);
+  min-width: 110px;
+}
+
+.timeline__desc {
+  color: var(--text-muted);
+  flex: 1 1 320px;
+}
+
+/* --- Навыки: пилюли --- */
+
+.skills {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.skill {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.skill:hover {
+  background: var(--accent);
+  color: var(--bg-alt);
+  transform: translateY(-3px);
+}
+
+/* --- Проекты: панели с акцентной полосой слева --- */
+
+.projects {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.project-card {
+  flex: 1 1 300px;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: var(--radius-panel);
+  padding: 22px 24px;
+  transition: border-left-color var(--transition), transform var(--transition);
+}
+
+.project-card:hover {
+  border-left-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.project-card h3 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.project-card p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* =========================================================
+   7. Контакты / подвал
+   ========================================================= */
+
+.footer {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--border);
+  padding: 56px 6vw;
+  text-align: center;
+}
+
+.footer h2 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.contacts {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.contacts a {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 10px 22px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+.contacts a:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-alt);
+}
+
+.footer__note {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* =========================================================
+   8. Бонус: версия для печати
+   Не относится к адаптивности под устройства (этого в лабораторной
+   ещё не требуется) — просто удобный вид, если резюме распечатать.
+   ========================================================= */
+
+@media print {
+  .nav__list,
+  .theme-switch {
+    display: none;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .header__hero {
+    background-image: none;
+  }
+}
+
+/* Уважение к настройке "уменьшить анимацию" в ОС пользователя */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
