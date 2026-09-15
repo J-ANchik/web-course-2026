@@ -1,0 +1,580 @@
+/* =========================================================
+   CodeWave 2026 — адаптивный лендинг
+   Подход: Mobile First
+   Базовые стили (без медиазапроса)  -> мобильный экран (<767px)
+   @media (min-width: 768px)         -> планшет (768–1199px)
+   @media (min-width: 1200px)        -> десктоп (от 1200px)
+   ========================================================= */
+
+/* ---------- 1. Сброс и переменные ---------- */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* тёмная тема — используется по умолчанию */
+  --bg: #12131a;
+  --bg-alt: #191b25;
+  --surface: #1e2130;
+  --border: #2b2e3f;
+  --text: #eef0f6;
+  --text-muted: #9497ad;
+  --accent: #f2a93b;      /* сигнальный янтарный — основной акцент */
+  --accent-ink: #1c1400;  /* текст поверх янтарного */
+  --accent-2: #57c2b8;    /* тёплый бирюзовый — второй акцент */
+  --shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+  --radius: 14px;
+  --transition: 0.25s ease;
+  --max-width: 1140px;
+}
+
+/* светлая тема: включается чекбоксом #theme-toggle через общий соседний селектор */
+#theme-toggle:checked ~ .page {
+  --bg: #f1f2f7;
+  --bg-alt: #ffffff;
+  --surface: #ffffff;
+  --border: #dfe1ea;
+  --text: #16171f;
+  --text-muted: #5b5e72;
+  --accent: #c9821f;
+  --accent-ink: #ffffff;
+  --accent-2: #2f8e84;
+  --shadow: 0 16px 40px rgba(22, 23, 31, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, .logo {
+  font-family: 'Sora', 'IBM Plex Sans', sans-serif;
+  line-height: 1.15;
+  font-weight: 700;
+}
+
+h2 { font-size: clamp(1.5rem, 4vw, 2.1rem); margin-bottom: 0.5rem; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+
+a { color: inherit; text-decoration: none; }
+
+ul { list-style: none; }
+
+img, svg { max-width: 100%; display: block; }
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--accent-ink);
+  padding: 0.75rem 1rem;
+  z-index: 200;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 2px;
+}
+
+.visually-hidden-checkbox {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- 2. Структурная сетка страницы (CSS GRID) ----------
+   .page — верхнеуровневый Grid: шапка / основной контент / подвал.
+   Именно так задаётся расположение крупных блоков страницы. */
+
+.page {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ---------- 3. Шапка (Flexbox — навигация и компоненты шапки) ---------- */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--bg-alt) 92%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: 0.9rem 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.logo {
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+}
+.logo-code { color: var(--text); }
+.logo-wave { color: var(--accent); }
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  order: 2;
+}
+
+/* Мобильное выпадающее меню: изначально свёрнуто */
+.main-nav {
+  order: 3;
+  flex-basis: 100%;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height var(--transition), opacity var(--transition);
+}
+
+.main-nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding-top: 0.5rem;
+}
+
+.main-nav a {
+  display: block;
+  padding: 0.65rem 0.25rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  transition: color var(--transition);
+}
+.main-nav a:hover,
+.main-nav a:focus-visible {
+  color: var(--accent);
+}
+
+/* Разворачиваем меню, когда чекбокс #nav-toggle отмечен */
+#nav-toggle:checked ~ .header-inner .main-nav {
+  max-height: 320px;
+  opacity: 1;
+}
+
+/* Гамбургер — только внешний вид, клик обрабатывает сам <label for="nav-toggle"> */
+.hamburger {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  border-radius: 10px;
+}
+.hamburger:hover { background: var(--surface); }
+.hamburger span {
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+#nav-toggle:checked ~ .header-inner .hamburger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+#nav-toggle:checked ~ .header-inner .hamburger span:nth-child(2) {
+  opacity: 0;
+}
+#nav-toggle:checked ~ .header-inner .hamburger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Плавающий переключатель темы — CSS-only, без единой строки JS */
+.theme-switch {
+  position: fixed;
+  right: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 150;
+  cursor: pointer;
+}
+.switch-track {
+  width: 52px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  box-shadow: var(--shadow);
+  transition: background var(--transition);
+}
+.switch-knob {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  transition: transform var(--transition);
+}
+#theme-toggle:checked + .theme-switch .switch-knob {
+  transform: translateX(20px);
+}
+
+/* ---------- 4. Герой-секция (CSS GRID — крупный блок из двух зон) ---------- */
+
+.hero {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: 2.5rem 1.25rem 3rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.hero-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin-bottom: 1rem;
+}
+
+.hero-text {
+  color: var(--text-muted);
+  max-width: 56ch;
+  margin-bottom: 1.5rem;
+}
+
+/* Кнопки с текстом (компонент) — Flexbox */
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.4rem;
+  border-radius: 10px;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: transform var(--transition), background var(--transition), border-color var(--transition);
+}
+.btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+.btn-primary:hover, .btn-primary:focus-visible {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--accent) 88%, white 12%);
+}
+.btn-secondary {
+  background: transparent;
+  border-color: var(--border);
+  color: var(--text);
+}
+.btn-secondary:hover, .btn-secondary:focus-visible {
+  border-color: var(--accent-2);
+  color: var(--accent-2);
+}
+.btn-full { width: 100%; }
+
+.hero-visual svg { width: 100%; height: auto; }
+.wave-1 { stroke: var(--accent); opacity: 0.9; }
+.wave-2 { stroke: var(--accent-2); opacity: 0.7; }
+.wave-3 { stroke: var(--text-muted); opacity: 0.4; }
+.node { fill: var(--accent); }
+.node-2 { fill: var(--accent-2); }
+.node-3 { fill: var(--text-muted); }
+
+.wave { animation: drift 7s ease-in-out infinite; }
+.wave-2 { animation-delay: -2s; }
+.wave-3 { animation-delay: -4s; }
+.node { animation: bob 3.5s ease-in-out infinite; transform-origin: center; }
+
+@keyframes drift {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-4px) scale(1.15); }
+}
+
+/* ---------- 5. Секции: заголовок + карточки (CSS GRID для сетки карточек) ---------- */
+
+.features, .schedule {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: 2.5rem 1.25rem;
+}
+
+.section-lead {
+  color: var(--text-muted);
+  max-width: 60ch;
+  margin-bottom: 1.75rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+/* Внутреннее содержимое карточки — Flexbox (иконка, заголовок, текст) */
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+.feature-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow);
+  border-color: var(--accent-2);
+}
+.feature-icon { font-size: 1.6rem; }
+.feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+.schedule { background: var(--bg-alt); }
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.day-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+}
+.day-card.day-2 { border-left-color: var(--accent-2); }
+.day-card.day-3 { border-left-color: var(--text-muted); }
+
+.day-card h3 { margin-bottom: 0.85rem; }
+
+.day-card ul { display: flex; flex-direction: column; gap: 0.6rem; }
+.day-card li {
+  display: flex;
+  gap: 0.75rem;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+}
+.day-card time {
+  flex: 0 0 3.2rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ---------- 6. Форма обратной связи ---------- */
+
+.contact {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.contact-inner {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+.contact-intro p { color: var(--text-muted); margin-top: 0.5rem; max-width: 42ch; }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-row label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.form-row input,
+.form-row textarea {
+  min-height: 44px;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font: inherit;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.form-row textarea { min-height: 96px; resize: vertical; }
+
+.form-row input:hover,
+.form-row textarea:hover {
+  border-color: var(--accent-2);
+}
+.form-row input:focus,
+.form-row textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 30%, transparent);
+}
+
+/* ---------- 7. Подвал (Flexbox) ---------- */
+
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--bg-alt);
+  padding: 2.5rem 1.25rem 1.5rem;
+}
+
+.footer-grid {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-brand { flex: 1 1 220px; }
+.footer-brand p { color: var(--text-muted); margin-top: 0.6rem; font-size: 0.9rem; max-width: 32ch; }
+
+.footer-nav, .footer-social { flex: 1 1 140px; }
+.footer-nav h4, .footer-social h4 { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 600; }
+.footer-nav ul, .footer-social ul { display: flex; flex-direction: column; gap: 0.5rem; }
+.footer-nav a:hover, .footer-social a:hover { color: var(--accent); }
+
+.footer-copy {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+
+/* ---------- 8. Mobile First: расширение под планшет ---------- */
+
+@media (min-width: 768px) {
+
+  .header-inner { flex-wrap: nowrap; }
+
+  .main-nav {
+    order: 2;
+    flex-basis: auto;
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+  }
+  .main-nav ul {
+    flex-direction: row;
+    gap: 1.75rem;
+    padding-top: 0;
+  }
+  .main-nav a {
+    border-top: none;
+    min-height: auto;
+    padding: 0.35rem 0;
+  }
+
+  .header-actions .hamburger { display: none; }
+
+  .hero {
+    grid-template-columns: 1.1fr 0.9fr;
+    padding-block: 4rem;
+  }
+
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+
+  .contact-inner { grid-template-columns: 0.9fr 1.1fr; align-items: start; }
+
+  .btn { padding: 0 1.75rem; }
+}
+
+/* ---------- 9. Mobile First: расширение под десктоп ---------- */
+
+@media (min-width: 1200px) {
+
+  .hero { padding-block: 5.5rem; gap: 3rem; }
+
+  .features-grid { grid-template-columns: repeat(4, 1fr); }
+  .schedule-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .day-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow);
+    transition: transform var(--transition), box-shadow var(--transition);
+  }
+}
+
+/* ---------- 10. Уважение к настройкам пользователя ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
