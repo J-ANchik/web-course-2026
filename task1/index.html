@@ -3,50 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Никита Марзляк — Frontend-разработчик</title>
+  <title>Никита Мерзляк — Frontend-разработчик</title>
 
-  
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://googleapis.com" rel="stylesheet">
 
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 
   <input type="checkbox" id="theme-toggle" class="sr-toggle">
 
   <header class="header" id="top">
 
     <nav class="nav" aria-label="Основная навигация">
-      <a class="nav__brand" href="#top">Е.М.</a>
+      <a class="nav__brand" href="#top">Н.М.</a>
 
       <ul class="nav__list">
         <li><a href="#about">Обо мне</a></li>
         <li><a href="#education">Образование</a></li>
         <li><a href="#skills">Навыки</a></li>
-        <li><a href="#projects">Проекты</a></li>
         <li><a href="#contacts">Контакты</a></li>
       </ul>
 
       <label for="theme-toggle" class="theme-switch" aria-label="Переключить тёмную тему">
         <span class="theme-track">
-          <span class="theme-icon" aria-hidden="true">&#9728;</span>
+          <span class="theme-icon" aria-hidden="true">☀</span>
           <span class="theme-knob"></span>
-          <span class="theme-icon" aria-hidden="true">&#9789;</span>
+          <span class="theme-icon" aria-hidden="true">☽</span>
         </span>
       </label>
     </nav>
 
     <div class="header__hero">
-      
-      <img class="avatar" src="https://i.pravatar.cc/300?img=47" alt="Портрет Евы Морозовой">
+      <!-- Имя файла твоей фотографии, которую мы сейчас загрузим -->
+      <img class="avatar" src="avatar.jpg" alt="Портрет Никиты Мерзляка">
 
       <div class="header__text">
-        <!-- ЗАМЕНИТЬ: имя, должность, слоган -->
-        <h1>Ева Морозова</h1>
+        <h1>Никита Мерзляк</h1>
         <p class="header__role">Frontend-разработчик</p>
-        <p class="header__slogan">Верстаю так, чтобы разметка не мешала человеку получить то, за чем он пришёл.</p>
+        <p class="header__slogan">Изучаю современные стандарты вёрстки и создаю доступные интерфейсы.</p>
       </div>
     </div>
   </header>
@@ -55,23 +51,19 @@
 
     <section id="about" class="section">
       <h2>Обо мне</h2>
-      
       <p class="about__text">
-        Последние три года я собираю интерфейсы на HTML, CSS и немного JavaScript, когда без него
-        правда не обойтись. Люблю Flexbox и Grid больше, чем готова признать на собеседовании,
-        и стараюсь не тащить в проект лишний код, если задачу решает чистая вёрстка.
-        Мне одинаково интересно переписать компонент с нуля и разобраться, почему у соседнего блока
-        не работает <code>margin</code>. Сейчас ищу проекты, где важны не только пиксели, но и то,
-        насколько удобно человеку с этим взаимодействовать.
+        Я начинающий веб-разработчик. Изучаю стандарты HTML5, семантическую разметку блоков и основы CSS3. 
+        Мне нравится разбираться в том, как устроены веб-интерфейсы и как делать их удобными для пользователей. 
+        Активно практикуюсь в построении сеток на Flexbox, изучаю методологию БЭМ и принципы работы с системой контроля версий Git. 
+        Стремлюсь писать чистый, структурированный код и развиваться во фронтенд-разработке.
       </p>
     </section>
 
     <section id="education" class="section">
       <h2>Образование</h2>
-      
       <ul class="timeline">
         <li class="timeline__item">
-          <span class="timeline__year">2022–2026</span>
+          <span class="timeline__year">2024–2028</span>
           <span class="timeline__desc">
             Белорусский государственный университет — факультет информационных технологий,
             бакалавриат «Программная инженерия»
@@ -79,12 +71,6 @@
         </li>
         <li class="timeline__item">
           <span class="timeline__year">2021</span>
-          <span class="timeline__desc">
-            Онлайн-курс «HTML/CSS с нуля», Skillbox — сертификат о прохождении
-          </span>
-        </li>
-        <li class="timeline__item">
-          <span class="timeline__year">2019</span>
           <span class="timeline__desc">
             Лицей БГУ, физико-математический класс
           </span>
@@ -94,50 +80,25 @@
 
     <section id="skills" class="section">
       <h2>Навыки</h2>
-      <!-- ЗАМЕНИТЬ список своими навыками -->
       <ul class="skills">
-        <li><span class="skill">HTML5</span></li>
+        <li><span class="skill">HTML5 (Семантика)</span></li>
         <li><span class="skill">CSS3</span></li>
-        <li><span class="skill">Flexbox</span></li>
-        <li><span class="skill">CSS Grid</span></li>
-        <li><span class="skill">Адаптивная вёрстка</span></li>
+        <li><span class="skill">Flexbox Layout</span></li>
+        <li><span class="skill">БЭМ методология</span></li>
+        <li><span class="skill">Валидация кода</span></li>
         <li><span class="skill">Git &amp; GitHub</span></li>
-        <li><span class="skill">Доступность (a11y)</span></li>
-        <li><span class="skill">Figma → код</span></li>
+        <li><span class="skill">VS Code</span></li>
       </ul>
-    </section>
-
-    <section id="projects" class="section">
-      <h2>Проекты</h2>
-      
-      <div class="projects">
-        <article class="project-card">
-          <h3>Конструктор визиток</h3>
-          <p>
-            Pet-проект: генератор макетов бизнес-карточек на чистом CSS Grid,
-            без единой строчки JavaScript — раскладка меняется только за счёт вариаций сетки.
-          </p>
-        </article>
-
-        <article class="project-card">
-          <h3>Тайм-трекер для фрилансеров</h3>
-          <p>
-            Учебный дашборд с адаптацией под три брейкпоинта и формой добавления задач —
-            вёрстка полностью на Flexbox и Grid, без float и абсолютного позиционирования.
-          </p>
-        </article>
-      </div>
     </section>
 
   </main>
 
   <footer id="contacts" class="footer">
     <h2>Контакты</h2>
-    
     <ul class="contacts">
-      <li><a href="mailto:eva.morozova@example.com">Email</a></li>
-      <li><a href="tel:+7997734567">Телефон</a></li>
-      
+      <li><a href="mailto:nikita.merzlyak@example.com">Email</a></li>
+      <li><a href="tel:+375291234567">Телефон</a></li>
+      <li><a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a></li>
     </ul>
     <p class="footer__note">Страница сделана в рамках курса «JavaScript и веб-разработка» — лабораторная работа №1.</p>
   </footer>
