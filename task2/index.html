@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CodeWave 2026 — конференция для разработчиков: доклады, воркшопы и нетворкинг.">
+<meta name="theme-color" content="#12131a">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%A1%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>CodeWave 2026 — конференция для разработчиков</title>
+</head>
+<body>
+
+<a href="#main" class="skip-link">Перейти к содержимому</a>
+
+<!-- Скрытый чекбокс переключения темы: управляет CSS-переменными всей страницы -->
+<input type="checkbox" id="theme-toggle" class="visually-hidden-checkbox">
+<label for="theme-toggle" class="theme-switch" aria-label="Переключить светлую и тёмную тему">
+  <span class="switch-track">
+    <span class="switch-knob"></span>
+  </span>
+</label>
+
+<div class="page">
+
+  <header class="site-header">
+    <!-- Скрытый чекбокс гамбургер-меню: только внешний вид, клик по label -->
+    <input type="checkbox" id="nav-toggle" class="visually-hidden-checkbox">
+    <div class="header-inner">
+      <a href="#hero" class="logo"><span class="logo-code">Code</span><span class="logo-wave">Wave</span></a>
+
+      <nav class="main-nav" aria-label="Основная навигация">
+        <ul>
+          <li><a href="#hero">Главная</a></li>
+          <li><a href="#features">О конференции</a></li>
+          <li><a href="#schedule">Программа</a></li>
+          <li><a href="#contact">Регистрация</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <label for="nav-toggle" class="hamburger" aria-label="Открыть меню">
+          <span></span><span></span><span></span>
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <section class="hero" id="hero">
+      <div class="hero-content">
+        <p class="hero-date">3–5 октября 2026, очно в Москве и онлайн</p>
+        <h1>Три дня, которые двигают ваш код вперёд</h1>
+        <p class="hero-text">CodeWave собирает разработчиков, чтобы разбирать реальные архитектурные решения,
+          разбираться в новых инструментах на воркшопах и находить команду для следующего проекта.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-primary">Зарегистрироваться</a>
+          <a href="#schedule" class="btn btn-secondary">Смотреть программу</a>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <svg viewBox="0 0 420 320" xmlns="http://www.w3.org/2000/svg">
+          <path class="wave wave-1" d="M0 200 C 60 140, 100 260, 160 200 S 260 140, 320 200 S 400 250, 420 210"
+                fill="none" stroke-width="3"/>
+          <path class="wave wave-2" d="M0 150 C 70 90, 110 210, 180 150 S 270 90, 340 150 S 400 190, 420 160"
+                fill="none" stroke-width="3"/>
+          <path class="wave wave-3" d="M0 240 C 50 190, 120 290, 190 240 S 280 190, 350 240 S 400 260, 420 245"
+                fill="none" stroke-width="2"/>
+          <circle class="node node-1" cx="160" cy="200" r="6"/>
+          <circle class="node node-2" cx="270" cy="150" r="5"/>
+          <circle class="node node-3" cx="350" cy="240" r="4"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <h2>Почему стоит приехать</h2>
+      <p class="section-lead">Программа устроена так, чтобы после конференции у вас остались не только заметки, но и рабочие контакты и код.</p>
+
+      <div class="features-grid">
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">🎤</span>
+          <h3>40+ спикеров</h3>
+          <p>Инженеры из продуктовых компаний рассказывают о решениях, которые реально стоят в проде.</p>
+        </article>
+
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">🛠️</span>
+          <h3>20 воркшопов</h3>
+          <p>От основ адаптивной вёрстки до архитектуры больших фронтенд-приложений — с ноутбуком и практикой.</p>
+        </article>
+
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">🤝</span>
+          <h3>Нетворкинг</h3>
+          <p>Отдельные зоны и сессии для знакомств с будущими коллегами, менторами и работодателями.</p>
+        </article>
+
+        <article class="feature-card">
+          <span class="feature-icon" aria-hidden="true">🎥</span>
+          <h3>Запись докладов</h3>
+          <p>Все доклады снимаются и остаются доступны участникам — можно вернуться к любому моменту.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="schedule" id="schedule">
+      <h2>Программа</h2>
+      <p class="section-lead">Три дня, три фокуса: доклады, практика и карьера.</p>
+
+      <div class="schedule-grid">
+        <article class="day-card day-1">
+          <h3>День 1 · 3 октября</h3>
+          <ul>
+            <li><time>09:00</time><span>Открытие и приветствие</span></li>
+            <li><time>10:00</time><span>Кейноут: будущее веб-разработки</span></li>
+            <li><time>13:00</time><span>Воркшоп: CSS Grid на практике</span></li>
+            <li><time>16:00</time><span>Нетворкинг-сессия</span></li>
+          </ul>
+        </article>
+
+        <article class="day-card day-2">
+          <h3>День 2 · 4 октября</h3>
+          <ul>
+            <li><time>10:00</time><span>Доклад: архитектура фронтенда</span></li>
+            <li><time>12:00</time><span>Панель: карьера в IT</span></li>
+            <li><time>14:00</time><span>Воркшоп: адаптивная вёрстка</span></li>
+            <li><time>18:00</time><span>Неформальная встреча</span></li>
+          </ul>
+        </article>
+
+        <article class="day-card day-3">
+          <h3>День 3 · 5 октября</h3>
+          <ul>
+            <li><time>10:00</time><span>Доклад: DevOps для разработчиков</span></li>
+            <li><time>12:00</time><span>Мастер-класс: собеседование в IT</span></li>
+            <li><time>15:00</time><span>Закрытие и призы</span></li>
+            <li><time>16:00</time><span>Общее фото</span></li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="contact" id="contact">
+      <div class="contact-inner">
+        <div class="contact-intro">
+          <h2>Регистрация</h2>
+          <p>Оставьте контакты — пришлём билет и программу на почту. Мест на офлайн-площадке ограниченное количество.</p>
+        </div>
+
+        <form class="contact-form" action="#contact">
+          <div class="form-row">
+            <label for="name">Имя</label>
+            <input type="text" id="name" name="name" placeholder="Как к вам обращаться?" required>
+          </div>
+          <div class="form-row">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="form-row">
+            <label for="message">Сообщение</label>
+            <textarea id="message" name="message" rows="4" placeholder="Есть вопрос или пожелание к программе?"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-full">Отправить</button>
+        </form>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#hero" class="logo"><span class="logo-code">Code</span><span class="logo-wave">Wave</span></a>
+        <p>Конференция для тех, кто пишет код и хочет писать его лучше.</p>
+      </div>
+
+      <nav class="footer-nav" aria-label="Навигация в подвале">
+        <h4>Разделы</h4>
+        <ul>
+          <li><a href="#hero">Главная</a></li>
+          <li><a href="#features">О конференции</a></li>
+          <li><a href="#schedule">Программа</a></li>
+          <li><a href="#contact">Регистрация</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer-social">
+        <h4>Мы на связи</h4>
+        <ul>
+          <li><a href="#">Telegram</a></li>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">VK</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="footer-copy">© 2026 CodeWave. Учебный проект, лабораторная работа №2.</p>
+  </footer>
+
+</div>
+</body>
+</html>
