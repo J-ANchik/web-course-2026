@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мои дела — доска задач</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="board">
+
+    <header class="board__header">
+      <h1 class="board__title">Мои дела</h1>
+      <p class="board__subtitle">Приклей новую задачу на доску — и не забудь её выполнить</p>
+    </header>
+
+    <form id="task-form" class="task-form" novalidate>
+      <input
+        type="text"
+        id="task-input"
+        class="task-form__input"
+        placeholder="Например: полить цветы..."
+        autocomplete="off"
+        maxlength="120"
+      >
+      <button type="submit" class="task-form__submit">Приклеить</button>
+    </form>
+    <p id="warning" class="warning" hidden>Сначала напишите, что нужно сделать</p>
+
+    <nav class="filters" id="filters" aria-label="Фильтр задач">
+      <button type="button" class="filters__btn is-active" data-filter="all">Все</button>
+      <button type="button" class="filters__btn" data-filter="active">Активные</button>
+      <button type="button" class="filters__btn" data-filter="completed">Завершённые</button>
+    </nav>
+
+    <p id="empty-state" class="empty-state" hidden>На доске пока пусто. Самое время что-то придумать.</p>
+
+    <ul id="task-list" class="task-grid"></ul>
+
+    <footer class="counter" id="counter" aria-live="polite">Осталось: 0 · Выполнено: 0</footer>
+
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
