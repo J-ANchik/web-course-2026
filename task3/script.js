@@ -1,6 +1,6 @@
 
 // Лабораторная работа №3. Todo-list на чистом JavaScript
-// Данные не сохраняются между перезагрузками (localStorage — в лабе №9)
+// Данные не сохраняются между перезагрузками 
 
 // Ссылки на DOM-элементы
 const form = document.getElementById('task-form');
