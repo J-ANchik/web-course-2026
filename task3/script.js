@@ -19,7 +19,7 @@ const NOTE_COLORS = ['#FFD23F', '#FF6FA5', '#45D0C6', '#B497F0', '#FF9F45'];
 // Задачи храним как массив объектов:
 // { id: 1, text: 'Сделать лабу', completed: false }
 let tasks = [
-  { id: 1, text: 'Сделать лабораторную №3', completed: false },
+  { id: 1, text: 'Сделать ', completed: false },
   { id: 2, text: 'Выпить кофе', completed: true },
   { id: 3, text: 'Погулять на солнце', completed: false }
 ];
