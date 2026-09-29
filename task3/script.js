@@ -75,10 +75,10 @@ function createTaskElement(task) {
 // Перерисовывает список на основе массива tasks и текущего фильтра
 function render() {
   const filtered = getFilteredTasks();
+  listEl.innerHTML = ''; // Очистили список
 
-  listEl.innerHTML = '';
   filtered.forEach((task) => {
-    listEl.prepend(createTaskElement(task));
+    listEl.appendChild(createTaskElement(task)); // Обычное добавление по порядку
   });
 
   emptyStateEl.hidden = filtered.length !== 0;
