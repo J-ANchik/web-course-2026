@@ -78,7 +78,7 @@ function render() {
 
   listEl.innerHTML = '';
   filtered.forEach((task) => {
-    listEl.appendChild(createTaskElement(task));
+    listEl.prepend(createTaskElement(task));
   });
 
   emptyStateEl.hidden = filtered.length !== 0;
@@ -96,7 +96,7 @@ function updateCounter() {
 // Действия с задачами
 
 function addTask(text) {
-  tasks.push({ id: nextId, text, completed: false });
+  tasks.unshift({ id: nextId, text, completed: false });
   nextId += 1;
   render();
 }
