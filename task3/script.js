@@ -97,6 +97,7 @@ function updateCounter() {
 
 function addTask(text) {
   tasks.unshift({ id: nextId, text, completed: false });
+  
   nextId += 1;
   render();
 }
