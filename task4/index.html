@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Быки и коровы</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Вся логика — в script.js; defer: скрипт выполнится после разбора HTML -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="game">
+    <h1>Быки и коровы</h1>
+
+    <p class="rules">
+      Загадано число из 4 разных цифр. <b class="bulls">Бык</b> — цифра угадана и стоит
+      на своём месте, <b class="cows">корова</b> — цифра есть в числе, но стоит на другом месте.
+    </p>
+
+    <!-- Счётчик попыток -->
+    <p class="counter">Попыток: <span id="attempts">0</span></p>
+
+    <!-- Поле ввода + кнопка «Проверить».
+         type="text" (а не number), чтобы можно было ввести и проверить любые символы,
+         а ведущий ноль (например, 0123) не пропадал. inputmode="numeric" открывает
+         цифровую клавиатуру на телефоне. -->
+    <div class="guess-row">
+      <input
+        id="guess-input"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="0000"
+        aria-label="Ваша попытка: 4 разные цифры"
+      >
+      <button id="check-btn" type="button">Проверить</button>
+    </div>
+
+    <!-- Сообщения: ошибки валидации и победа -->
+    <p id="message" class="message" role="status" aria-live="polite"></p>
+
+    <!-- История попыток (список наполняется из JS на основе массива) -->
+    <section class="history-block">
+      <h2>История попыток</h2>
+      <p id="history-empty" class="history-empty">Пока пусто. Введите 4 разные цифры и нажмите «Проверить».</p>
+      <ol id="history" class="history"></ol>
+    </section>
+
+    <button id="new-game-btn" class="secondary" type="button">Новая игра</button>
+  </main>
+</body>
+</html>
