@@ -269,10 +269,10 @@ function handleCheck() {
   inputEl.value = '';
   render();
 
-  // Куда передать фокус: в поле ввода — или на «Новая игра» после победы
-  if (isGameOver) {
-    newGameBtn.focus();
-  } else {
+  // Возвращаем фокус в поле ввода, только если игра продолжается.
+  // После победы фокус на «Новая игра» НЕ переводим: иначе то же самое нажатие Enter
+  // сработало бы уже на этой кнопке и игра сразу началась бы заново.
+  if (!isGameOver) {
     inputEl.focus();
   }
 }
@@ -302,6 +302,7 @@ checkBtn.addEventListener('click', handleCheck);
 // Enter в поле ввода делает то же самое, что и кнопка
 inputEl.addEventListener('keydown', function (event) {
   if (event.key === 'Enter') {
+    event.preventDefault(); // отменяем стандартную реакцию браузера на Enter
     handleCheck();
   }
 });
