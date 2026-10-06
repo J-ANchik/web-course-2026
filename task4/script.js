@@ -7,38 +7,32 @@
 // ---------------------------------------------------------------------
 // 1. Константы
 // ---------------------------------------------------------------------
+function main() {
+   // Длина загадываемого числа (по заданию — 4 цифры)
+   const CODE_LENGTH = 4;
+   // Загаданное число. Храним СТРОКОЙ, чтобы не потерять ведущий ноль ("0572")
+   let secret = '';
+   // Флаг окончания игры: true после победы, пока не нажата «Новая игра»
+   let isGameOver = false;
+   
+   const inputEl = document.getElementById('guess-input');       // поле ввода
+   const checkBtn = document.getElementById('check-btn');        // кнопка «Проверить»
+   const newGameBtn = document.getElementById('new-game-btn');   // кнопка «Новая игра»
+   const attemptsEl = document.getElementById('attempts');       // счётчик попыток
+   const messageEl = document.getElementById('message');         // сообщения об ошибке / победе
+   const historyEl = document.getElementById('history');         // список истории
+   const historyEmptyEl = document.getElementById('history-empty'); // подсказка при пустой истории
+   
+      // Кнопка «Новая игра»
+   newGameBtn.addEventListener('click', startNewGame);
+   
+   // ---------------------------------------------------------------------
+   // 8. Запуск: при загрузке страницы сразу начинаем новую игру
+   // ---------------------------------------------------------------------
+   startNewGame();
+}
 
-// Длина загадываемого числа (по заданию — 4 цифры)
-const CODE_LENGTH = 4;
-
-// ---------------------------------------------------------------------
-// 2. Состояние приложения
-//    Все данные игры хранятся здесь, а экран всегда рисуется из них
-//    (функция render()). Напрямую в HTML мы ничего не дописываем.
-// ---------------------------------------------------------------------
-
-// Загаданное число. Храним СТРОКОЙ, чтобы не потерять ведущий ноль ("0572")
-let secret = '';
-
-// История попыток — массив объектов:
-// { guess: "1234", bulls: 1, cows: 2 }
-let history = [];
-
-// Флаг окончания игры: true после победы, пока не нажата «Новая игра»
-let isGameOver = false;
-
-// ---------------------------------------------------------------------
-// 3. Ссылки на элементы страницы
-// ---------------------------------------------------------------------
-
-const inputEl = document.getElementById('guess-input');       // поле ввода
-const checkBtn = document.getElementById('check-btn');        // кнопка «Проверить»
-const newGameBtn = document.getElementById('new-game-btn');   // кнопка «Новая игра»
-const attemptsEl = document.getElementById('attempts');       // счётчик попыток
-const messageEl = document.getElementById('message');         // сообщения об ошибке / победе
-const historyEl = document.getElementById('history');         // список истории
-const historyEmptyEl = document.getElementById('history-empty'); // подсказка при пустой истории
-
+main();
 // ---------------------------------------------------------------------
 // 4. Функции игровой логики
 // ---------------------------------------------------------------------
@@ -307,10 +301,4 @@ inputEl.addEventListener('keydown', function (event) {
   }
 });
 
-// Кнопка «Новая игра»
-newGameBtn.addEventListener('click', startNewGame);
 
-// ---------------------------------------------------------------------
-// 8. Запуск: при загрузке страницы сразу начинаем новую игру
-// ---------------------------------------------------------------------
-startNewGame();
