@@ -1,0 +1,235 @@
+/* ===== Цвета и общие настройки ===== */
+:root {
+  --page: #3a3fe0;      /* кобальтовый фон страницы */
+  --card: #ffffff;      /* карточка игры */
+  --ink: #1b1d3a;       /* основной текст */
+  --muted: #62668f;     /* второстепенный текст */
+  --line: #e4e6f7;      /* тонкие границы */
+  --bull: #e8431f;      /* быки — красно-оранжевый */
+  --bull-bg: #ffe6df;
+  --cow: #0c8f80;       /* коровы — бирюзовый */
+  --cow-bg: #d9f5f0;
+  --win: #ffc933;       /* подсветка победной строки */
+  --error: #c91c48;
+  --radius: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 24px 16px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  line-height: 1.45;
+}
+
+/* ===== Карточка игры ===== */
+.game {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 28px 24px 24px;
+  background: var(--card);
+  border-radius: 24px;
+  box-shadow: 0 12px 0 rgba(0, 0, 0, 0.18);
+}
+
+h1 {
+  margin: 0 0 8px;
+  font-size: 2.2rem;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+}
+
+.rules {
+  margin: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+b.bulls { color: var(--bull); }
+b.cows  { color: var(--cow); }
+
+.counter {
+  margin: 0 0 12px;
+  font-size: 1.1rem;
+  font-weight: bold;
+}
+
+/* ===== Поле ввода и кнопка ===== */
+.guess-row {
+  display: flex;
+  gap: 10px;
+}
+
+#guess-input {
+  flex: 1;
+  min-width: 0;
+  padding: 12px 8px;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--ink);
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.4em;
+  text-align: center;
+}
+
+#guess-input::placeholder {
+  color: #c3c6e6;
+}
+
+#guess-input:disabled {
+  background: var(--line);
+  border-color: var(--line);
+  cursor: not-allowed;
+}
+
+button {
+  padding: 0 20px;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  background: var(--win);
+  color: var(--ink);
+  font: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover:not(:disabled) {
+  filter: brightness(0.95);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(2px);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+button.secondary {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px;
+  background: var(--ink);
+  color: #fff;
+}
+
+/* Хорошо заметный фокус для клавиатуры */
+input:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--page);
+  outline-offset: 2px;
+}
+
+/* ===== Сообщения (ошибка / победа) ===== */
+.message {
+  min-height: 3em;          /* резервируем место, чтобы страница не «прыгала» */
+  margin: 10px 0 0;
+  font-weight: bold;
+}
+
+.message.error {
+  color: var(--error);
+}
+
+.message.success {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: var(--win);
+  color: var(--ink);
+  font-size: 1.1rem;
+}
+
+/* ===== История попыток ===== */
+.history-block {
+  margin-top: 8px;
+}
+
+.history-empty {
+  margin: 0;
+  padding: 14px;
+  border: 2px dashed var(--line);
+  border-radius: var(--radius);
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.history {
+  max-height: 280px;        /* длинная история прокручивается внутри блока */
+  margin: 0;
+  padding: 0 0 0 2.2em;
+  overflow-y: auto;
+}
+
+.history li {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 1.05rem;
+}
+
+.history li::marker {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.history .guess {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-weight: bold;
+  letter-spacing: 0.15em;
+}
+
+.history .bulls,
+.history .cows {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.history .bulls {
+  background: var(--bull-bg);
+  color: var(--bull);
+}
+
+.history .cows {
+  background: var(--cow-bg);
+  color: var(--cow);
+}
+
+/* Последняя (выигрышная) строка */
+.history li.win {
+  background: var(--win);
+  border-radius: 8px;
+  padding-left: 8px;
+  margin-left: -8px;
+}
+
+/* ===== Узкие экраны ===== */
+@media (max-width: 420px) {
+  .game {
+    padding: 20px 16px;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  #guess-input {
+    font-size: 1.6rem;
+    letter-spacing: 0.3em;
+  }
+}
