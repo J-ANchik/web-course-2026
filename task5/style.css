@@ -1,0 +1,224 @@
+/* ===== Палитра и базовые переменные ===== */
+:root {
+  --bg: #e8ebf1;        /* фон страницы — светлый "туман" */
+  --ink: #1c2130;       /* тёмный корпус игры и основной текст */
+  --muted: #5d647c;     /* второстепенный текст */
+  --ok: #0b7f72;        /* цвет сообщений об успехе */
+  --bad: #c0364a;       /* цвет сообщений об ошибке */
+
+  --c0: #12a594;        /* бирюзовый */
+  --c1: #ee5b6a;        /* коралловый */
+  --c2: #f2b13a;        /* янтарный */
+  --c3: #6a63ee;        /* фиолетовый */
+
+  --board-size: min(88vw, 60vh, 440px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "Trebuchet MS", "Segoe UI", Roboto, sans-serif;
+}
+
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 24px 16px;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-size: 2.6rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+/* ===== Строка статуса ===== */
+.status {
+  margin: 0;
+  min-height: 1.5em;           /* чтобы поле не "прыгало" при смене текста */
+  font-size: 1.05rem;
+  color: var(--muted);
+}
+
+.status--ok {
+  color: var(--ok);
+  font-weight: 700;
+}
+
+.status--error {
+  color: var(--bad);
+  font-weight: 700;
+}
+
+/* ===== Игровое поле: тёмный круглый корпус и 4 сектора внутри ===== */
+.board {
+  position: relative;
+  width: var(--board-size);
+  height: var(--board-size);
+  padding: 14px;
+  border-radius: 50%;
+  background: var(--ink);
+  box-shadow: 0 14px 30px rgba(28, 33, 48, 0.28);
+
+  /* Сетка 2×2 */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+}
+
+/* ===== Сектор ===== */
+.pad {
+  position: relative;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  background: var(--pad-color);
+
+  /* В "выключенном" состоянии сектор приглушён */
+  filter: brightness(0.55) saturate(0.9);
+  transition: filter 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* Каждому сектору скругляем только внешний угол — вместе выходит круг */
+.pad--0 { --pad-color: var(--c0); border-top-left-radius: 100%; }
+.pad--1 { --pad-color: var(--c1); border-top-right-radius: 100%; }
+.pad--2 { --pad-color: var(--c2); border-bottom-left-radius: 100%; }
+.pad--3 { --pad-color: var(--c3); border-bottom-right-radius: 100%; }
+
+/* Пока клики запрещены (идёт показ / игра не начата) — обычный курсор */
+.pad:disabled {
+  cursor: default;
+}
+
+/* Лёгкая подсветка при наведении только когда ввод разрешён */
+.pad:not(:disabled):hover {
+  filter: brightness(0.8) saturate(1);
+}
+
+.pad:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: -6px;
+}
+
+/* Подсветка сектора (её включает JS на время показа/нажатия) */
+.pad.active {
+  z-index: 1;
+  filter: brightness(1.25) saturate(1.1);
+  box-shadow: 0 0 36px 6px var(--pad-color);
+}
+
+/* Сектор, на котором игрок ошибся */
+.pad.error {
+  filter: brightness(0.35) grayscale(0.6);
+  animation: shake 0.35s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25%      { transform: translateX(-5px); }
+  75%      { transform: translateX(5px); }
+}
+
+/* ===== Центр круга с номером уровня ===== */
+.hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 34%;
+  height: 34%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;        /* клики проходят "сквозь" центр */
+  z-index: 2;
+}
+
+.hub__label {
+  font-size: 0.8rem;
+  color: #b7bdd6;
+}
+
+.hub__value {
+  font-size: clamp(1.8rem, 9vw, 3rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ===== Кнопки управления ===== */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.btn {
+  padding: 12px 34px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.btn:hover {
+  background: #2c3550;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn:focus-visible,
+.sound input:focus-visible {
+  outline: 3px solid var(--c3);
+  outline-offset: 3px;
+}
+
+.sound {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Уважаем настройку "уменьшить анимацию" */
+@media (prefers-reduced-motion: reduce) {
+  .pad,
+  .btn {
+    transition: none;
+  }
+
+  .pad.error {
+    animation: none;
+  }
+}
