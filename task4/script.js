@@ -2,45 +2,27 @@
 
 /* =====================================================================
    Лабораторная работа №4. Игра «Быки и коровы»
+
+   Структура файла:
+   1. Константа CODE_LENGTH
+   2. Игровая логика (генерация, валидация, подсчёт) — отдельные функции,
+      которые не зависят ни от страницы, ни от состояния игры
+   3. Функции для текста (склонение слов)
+   4. Вспомогательные функции для создания элементов
+   5. main() — состояние игры, элементы страницы, отрисовка, обработчики
+   6. Вызов main()
    ===================================================================== */
 
 // ---------------------------------------------------------------------
-// 1. Константы
+// 1. Константа
 // ---------------------------------------------------------------------
 
 // Длина загадываемого числа (по заданию — 4 цифры)
 const CODE_LENGTH = 4;
 
 // ---------------------------------------------------------------------
-// 2. Состояние приложения
-//    Все данные игры хранятся здесь, а экран всегда рисуется из них
-//    (функция render()). Напрямую в HTML мы ничего не дописываем.
-// ---------------------------------------------------------------------
-
-// Загаданное число. Храним СТРОКОЙ, чтобы не потерять ведущий ноль ("0572")
-let secret = '';
-
-// История попыток — массив объектов:
-// { guess: "1234", bulls: 1, cows: 2 }
-let history = [];
-
-// Флаг окончания игры: true после победы, пока не нажата «Новая игра»
-let isGameOver = false;
-
-// ---------------------------------------------------------------------
-// 3. Ссылки на элементы страницы
-// ---------------------------------------------------------------------
-
-const inputEl = document.getElementById('guess-input');       // поле ввода
-const checkBtn = document.getElementById('check-btn');        // кнопка «Проверить»
-const newGameBtn = document.getElementById('new-game-btn');   // кнопка «Новая игра»
-const attemptsEl = document.getElementById('attempts');       // счётчик попыток
-const messageEl = document.getElementById('message');         // сообщения об ошибке / победе
-const historyEl = document.getElementById('history');         // список истории
-const historyEmptyEl = document.getElementById('history-empty'); // подсказка при пустой истории
-
-// ---------------------------------------------------------------------
-// 4. Функции игровой логики
+// 2. Функции игровой логики
+//    Работают только со своими параметрами, поэтому вынесены из main().
 // ---------------------------------------------------------------------
 
 /**
@@ -124,7 +106,7 @@ function countBullsAndCows(secretCode, guess) {
 }
 
 // ---------------------------------------------------------------------
-// 5. Вспомогательные функции для текста
+// 3. Вспомогательные функции для текста
 // ---------------------------------------------------------------------
 
 /**
@@ -155,11 +137,11 @@ function formatCows(n) {
 }
 
 // ---------------------------------------------------------------------
-// 6. Отрисовка (интерфейс строится из массива history)
+// 4. Вспомогательные функции для создания элементов
 // ---------------------------------------------------------------------
 
 /**
- * Создаёт <span> с классом и текстом — маленький помощник для render().
+ * Создаёт <span> с классом и текстом — маленький помощник для createHistoryItem().
  */
 function createSpan(className, text) {
   const span = document.createElement('span');
@@ -170,7 +152,7 @@ function createSpan(className, text) {
 
 /**
  * Создаёт <li> для одной попытки: "1234 → 1 бык, 2 коровы".
- * @param {{guess: string, bulls: number, cows: number}} entry — запись из history
+ * @param {{guess: string, bulls: number, cows: number}} entry — запись из истории попыток
  */
 function createHistoryItem(entry) {
   const li = document.createElement('li');
@@ -192,124 +174,159 @@ function createHistoryItem(entry) {
   return li;
 }
 
-/**
- * Перерисовывает интерфейс целиком на основе текущего состояния
- * (массив history и флаг isGameOver). Вызывается после любого изменения данных.
- */
-function render() {
-  // Счётчик попыток = количество записей в истории
-  attemptsEl.textContent = history.length;
-
-  // История: map превращает каждую запись массива в <li>,
-  // replaceChildren заменяет старое содержимое списка новым
-  historyEl.replaceChildren(...history.map(createHistoryItem));
-
-  // Пока попыток нет — показываем подсказку вместо пустого списка
-  historyEmptyEl.hidden = history.length > 0;
-
-  // Прокручиваем историю вниз, чтобы была видна последняя попытка
-  historyEl.scrollTop = historyEl.scrollHeight;
-
-  // После победы блокируем ввод до нажатия «Новая игра»
-  inputEl.disabled = isGameOver;
-  checkBtn.disabled = isGameOver;
-}
-
-/**
- * Показывает сообщение игроку.
- * @param {string} text — текст (пустая строка очищает сообщение)
- * @param {string} type — 'error' | 'success' | '' — влияет на оформление
- */
-function showMessage(text, type) {
-  messageEl.textContent = text;
-  messageEl.className = type ? `message ${type}` : 'message';
-}
-
 // ---------------------------------------------------------------------
-// 7. Обработчики событий
+// 5. main() — главная функция приложения
+//    Здесь хранится состояние игры, находятся элементы страницы и
+//    функции, которые с ними работают: render, showMessage, handleCheck,
+//    startNewGame. В конце main() подключает обработчики и запускает игру.
 // ---------------------------------------------------------------------
+function main() {
+  // ===== Состояние приложения =====
+  // Все данные игры хранятся здесь, а экран всегда рисуется из них
+  // (функция render()). Напрямую в HTML мы ничего не дописываем.
 
-/**
- * Нажатие «Проверить» (или Enter в поле ввода).
- * Сам обработчик короткий: он только связывает функции, написанные выше —
- * валидацию, подсчёт и отрисовку.
- */
-function handleCheck() {
-  // Если игра уже выиграна — попытки не принимаем
-  if (isGameOver) return;
+  // Загаданное число. Храним СТРОКОЙ, чтобы не потерять ведущий ноль ("0572")
+  let secret = '';
 
-  // Убираем случайные пробелы по краям
-  const value = inputEl.value.trim();
+  // История попыток — массив объектов: { guess: "1234", bulls: 1, cows: 2 }
+  // (назван guessHistory, чтобы не путать со встроенным в браузер объектом history)
+  let guessHistory = [];
 
-  // 1) Валидация. При ошибке выводим сообщение, попытка НЕ засчитывается
-  const validation = validateGuess(value);
-  if (!validation.valid) {
-    showMessage(validation.error, 'error');
+  // Флаг окончания игры: true после победы, пока не нажата «Новая игра»
+  let isGameOver = false;
+
+  // ===== Элементы страницы =====
+  const inputEl = document.getElementById('guess-input');          // поле ввода
+  const checkBtn = document.getElementById('check-btn');           // кнопка «Проверить»
+  const newGameBtn = document.getElementById('new-game-btn');      // кнопка «Новая игра»
+  const attemptsEl = document.getElementById('attempts');          // счётчик попыток
+  const messageEl = document.getElementById('message');            // сообщения об ошибке / победе
+  const historyEl = document.getElementById('history');            // список истории
+  const historyEmptyEl = document.getElementById('history-empty'); // подсказка при пустой истории
+
+  /**
+   * Перерисовывает интерфейс целиком на основе текущего состояния
+   * (массив guessHistory и флаг isGameOver). Вызывается после любого изменения данных.
+   */
+  function render() {
+    // Счётчик попыток = количество записей в истории
+    attemptsEl.textContent = guessHistory.length;
+
+    // История: map превращает каждую запись массива в <li>,
+    // replaceChildren заменяет старое содержимое списка новым
+    historyEl.replaceChildren(...guessHistory.map(createHistoryItem));
+
+    // Пока попыток нет — показываем подсказку вместо пустого списка
+    historyEmptyEl.hidden = guessHistory.length > 0;
+
+    // Прокручиваем историю вниз, чтобы была видна последняя попытка
+    historyEl.scrollTop = historyEl.scrollHeight;
+
+    // После победы блокируем ввод до нажатия «Новая игра»
+    inputEl.disabled = isGameOver;
+    checkBtn.disabled = isGameOver;
+  }
+
+  /**
+   * Показывает сообщение игроку.
+   * @param {string} text — текст (пустая строка очищает сообщение)
+   * @param {string} type — 'error' | 'success' | '' — влияет на оформление
+   */
+  function showMessage(text, type) {
+    messageEl.textContent = text;
+    messageEl.className = type ? `message ${type}` : 'message';
+  }
+
+  /**
+   * Нажатие «Проверить» (или Enter в поле ввода).
+   * Сам обработчик короткий: он только связывает функции, написанные выше —
+   * валидацию, подсчёт и отрисовку.
+   */
+  function handleCheck() {
+    // Если игра уже выиграна — попытки не принимаем
+    if (isGameOver) return;
+
+    // Убираем случайные пробелы по краям
+    const value = inputEl.value.trim();
+
+    // 1) Валидация. При ошибке выводим сообщение, попытка НЕ засчитывается
+    const validation = validateGuess(value);
+    if (!validation.valid) {
+      showMessage(validation.error, 'error');
+      inputEl.focus();
+      inputEl.select(); // выделяем ввод, чтобы его можно было сразу перезаписать
+      return;
+    }
+
+    // 2) Подсчёт быков и коров
+    const { bulls, cows } = countBullsAndCows(secret, value);
+
+    // 3) Сохраняем попытку в массив состояния
+    guessHistory.push({ guess: value, bulls, cows });
+
+    // 4) Проверка победы
+    if (bulls === CODE_LENGTH) {
+      isGameOver = true;
+      const n = guessHistory.length;
+      showMessage(`Победа! Угадано за ${n} ${pluralize(n, 'попытку', 'попытки', 'попыток')}`, 'success');
+    } else {
+      showMessage('', ''); // убираем прошлую ошибку, если она была
+    }
+
+    // 5) Очищаем поле и перерисовываем интерфейс
+    inputEl.value = '';
+    render();
+
+    // Возвращаем фокус в поле ввода, только если игра продолжается.
+    // После победы фокус на «Новая игра» НЕ переводим: иначе то же самое нажатие Enter
+    // сработало бы уже на этой кнопке и игра сразу началась бы заново.
+    if (!isGameOver) {
+      inputEl.focus();
+    }
+  }
+
+  /**
+   * «Новая игра» (и первый запуск при загрузке страницы):
+   * сбрасывает загаданное число, историю и счётчик.
+   */
+  function startNewGame() {
+    secret = generateSecret();   // новое загаданное число
+    guessHistory = [];           // пустая история (счётчик попыток обнулится сам)
+    isGameOver = false;          // игра снова идёт
+
+    inputEl.value = '';
+    showMessage('', '');
+    render();
     inputEl.focus();
-    inputEl.select(); // выделяем ввод, чтобы его можно было сразу перезаписать
-    return;
+
+    // Отладка: загаданное число в консоли (F12), чтобы можно было
+    // проверить подсчёт быков и коров вручную. Перед сдачей можно удалить.
+    console.log('Загаданное число (для проверки):', secret);
   }
 
-  // 2) Подсчёт быков и коров
-  const { bulls, cows } = countBullsAndCows(secret, value);
+  // ===== Подключение обработчиков событий =====
 
-  // 3) Сохраняем попытку в массив состояния
-  history.push({ guess: value, bulls, cows });
+  // Кнопка «Проверить»
+  checkBtn.addEventListener('click', handleCheck);
 
-  // 4) Проверка победы
-  if (bulls === CODE_LENGTH) {
-    isGameOver = true;
-    const n = history.length;
-    showMessage(`Победа! Угадано за ${n} ${pluralize(n, 'попытку', 'попытки', 'попыток')}`, 'success');
-  } else {
-    showMessage('', ''); // убираем прошлую ошибку, если она была
-  }
+  // Enter в поле ввода делает то же самое, что и кнопка
+  inputEl.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // отменяем стандартную реакцию браузера на Enter
+      handleCheck();
+    }
+  });
 
-  // 5) Очищаем поле и перерисовываем интерфейс
-  inputEl.value = '';
-  render();
+  // Кнопка «Новая игра»
+  newGameBtn.addEventListener('click', startNewGame);
 
-  // Куда передать фокус: в поле ввода — или на «Новая игра» после победы
-  if (isGameOver) {
-    newGameBtn.focus();
-  } else {
-    inputEl.focus();
-  }
+  // ===== Запуск: при загрузке страницы сразу начинаем новую игру =====
+  startNewGame();
 }
 
-/**
- * «Новая игра» (и первый запуск при загрузке страницы):
- * сбрасывает загаданное число, историю и счётчик.
- */
-function startNewGame() {
-  secret = generateSecret();   // новое загаданное число
-  history = [];                // пустая история (счётчик попыток обнулится сам)
-  isGameOver = false;          // игра снова идёт
-
-  inputEl.value = '';
-  showMessage('', '');
-  render();
-  inputEl.focus();
-
-  // Отладка: загаданное число в консоли (F12), чтобы можно было
-  // проверить подсчёт быков и коров вручную. Перед сдачей можно удалить.
-  console.log('Загаданное число (для проверки):', secret);
-}
-
-// Кнопка «Проверить»
-checkBtn.addEventListener('click', handleCheck);
-
-// Enter в поле ввода делает то же самое, что и кнопка
-inputEl.addEventListener('keydown', function (event) {
-  if (event.key === 'Enter') {
-    handleCheck();
-  }
-});
-
-// Кнопка «Новая игра»
-newGameBtn.addEventListener('click', startNewGame);
-
 // ---------------------------------------------------------------------
-// 8. Запуск: при загрузке страницы сразу начинаем новую игру
+// 6. Запуск приложения
+//    Вызов стоит в самом конце файла: к этому моменту константа CODE_LENGTH
+//    и все функции выше уже объявлены.
 // ---------------------------------------------------------------------
-startNewGame();
+main();
