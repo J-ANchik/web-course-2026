@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simon — Лабораторная работа №5</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <h1 class="title">Simon</h1>
+
+    <!-- Подсказка/статус игры: что сейчас происходит и что делать игроку -->
+    <p id="status" class="status" role="status" aria-live="polite">
+      Нажмите «Старт», чтобы начать
+    </p>
+
+    <!-- Игровое поле: 4 сектора, собранные в круг (сетка 2×2 на CSS Grid) -->
+    <div class="board" id="board">
+      <button type="button" class="pad pad--0" data-index="0" aria-label="Бирюзовый сектор, клавиша 1" disabled></button>
+      <button type="button" class="pad pad--1" data-index="1" aria-label="Коралловый сектор, клавиша 2" disabled></button>
+      <button type="button" class="pad pad--2" data-index="2" aria-label="Янтарный сектор, клавиша 3" disabled></button>
+      <button type="button" class="pad pad--3" data-index="3" aria-label="Фиолетовый сектор, клавиша 4" disabled></button>
+
+      <!-- Центр круга: текущий уровень (длина последовательности) -->
+      <div class="hub">
+        <span class="hub__label">Уровень</span>
+        <span class="hub__value" id="level">0</span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button type="button" id="start-btn" class="btn">Старт</button>
+      <label class="sound">
+        <input type="checkbox" id="sound-toggle" checked>
+        Звук
+      </label>
+    </div>
+
+    <p class="hint">Играть можно и клавишами 1–4</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
