@@ -22,7 +22,7 @@ class SimonGame {
     GAME_OVER: 'gameover'
   };
 
-  static FREQUENCIES =;
+  static FREQUENCIES =[34,56,78,102, 120];
   static ERROR_FREQUENCY = 110;
 
   constructor() {
