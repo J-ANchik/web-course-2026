@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лабораторная работа №6 — Змейка</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="game">
+    <h1 class="game__title">Змейка</h1>
+
+    <!-- Счёт выводится HTML-элементом рядом с полем -->
+    <p class="game__score">Счёт: <span id="score">0</span></p>
+
+    <!-- Обёртка нужна, чтобы кнопку можно было расположить поверх canvas -->
+    <div class="field">
+      <canvas id="game-canvas" width="400" height="400"></canvas>
+      <!-- Кнопка скрыта (hidden) и показывается только после окончания игры -->
+      <button id="restart-btn" class="field__restart" type="button" hidden>Начать заново</button>
+    </div>
+
+    <p class="game__hint">Управление: стрелки ← ↑ ↓ →. После проигрыша можно нажать Enter.</p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
