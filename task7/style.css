@@ -1,0 +1,225 @@
+/* ===== Сброс и переменные ===== */
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #eef1f5;
+  --surface: #ffffff;
+  --ink: #1d2433;
+  --muted: #5b6578;
+  --border: #d9dfe8;
+  --accent: #2f5bd8;
+  --accent-dark: #2447ae;
+  --on-accent: #ffffff;
+  --error-bg: #fdecea;
+  --error-ink: #8c1d18;
+  --radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141922;
+    --surface: #1e2532;
+    --ink: #e6eaf2;
+    --muted: #9aa5b8;
+    --border: #2e374a;
+    --accent: #7c9cff;
+    --accent-dark: #a3b8ff;
+    --on-accent: #0f1626;
+    --error-bg: #3a1f1d;
+    --error-ink: #ffb4ab;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+/* ===== Шапка с поиском ===== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 16px;
+}
+
+.topbar__title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.topbar__counter {
+  margin: 0;
+  flex-basis: 100%;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ===== Поиск ===== */
+.search {
+  display: flex;
+  flex: 1 1 260px;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.search__label {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.search__input {
+  width: 100%;
+  min-height: 44px;                 /* удобно нажимать пальцем */
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.search__input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
+/* ===== Лента ===== */
+.feed {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.feed__list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ===== Карточка поста ===== */
+.post {
+  padding: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.post__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 8px;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.post__title {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  line-height: 1.3;
+}
+
+.post__body {
+  margin: 0;
+  white-space: pre-line;            /* сохраняем переносы строк из body */
+  color: var(--muted);
+}
+
+/* ===== Статусы ===== */
+.status {
+  padding: 16px 0 32px;
+  text-align: center;
+}
+
+.status__item {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* атрибут hidden должен работать, даже если у элемента задан display */
+.status__item[hidden] {
+  display: none;
+}
+
+.status__loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.status__error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: var(--error-bg);
+  color: var(--error-ink);
+  border-radius: var(--radius);
+}
+
+.status__error-text {
+  margin: 0;
+}
+
+.status__retry {
+  min-height: 44px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.status__retry:hover {
+  background: var(--accent-dark);
+}
+
+.status__retry:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+}
