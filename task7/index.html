@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Лента постов — лабораторная №7</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Вся логика — в одном файле script.js, подключаем с defer (скрипт выполнится после разбора DOM) -->
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <!-- Шапка с поиском. Закрепляется сверху при прокрутке -->
+  <header class="topbar">
+    <div class="topbar__inner">
+      <h1 class="topbar__title">Лента постов</h1>
+
+      <label class="search" for="search">
+        <span class="search__label">Поиск по заголовку</span>
+        <input
+          class="search__input"
+          id="search"
+          type="search"
+          placeholder="Например: qui est"
+          autocomplete="off"
+        >
+      </label>
+
+      <!-- Счётчик «показано / загружено» — заполняется из JS -->
+      <p class="topbar__counter" id="counter" aria-live="polite"></p>
+    </div>
+  </header>
+
+  <main class="feed">
+    <!-- Сюда JS добавляет карточки постов (разметка карточек в HTML не прописана) -->
+    <section class="feed__list" id="posts" aria-label="Список постов"></section>
+
+    <!-- Блок статусов: индикатор загрузки, ошибка, конец ленты, пустой результат.
+         Показ/скрытие управляется из JS через атрибут hidden -->
+    <div class="status" id="status">
+      <p class="status__item status__loader" id="loader" hidden>
+        <span class="spinner" aria-hidden="true"></span>
+        Загрузка…
+      </p>
+
+      <div class="status__item status__error" id="error" role="alert" hidden>
+        <p class="status__error-text" id="error-text"></p>
+        <button class="status__retry" id="retry" type="button">Повторить</button>
+      </div>
+
+      <p class="status__item status__end" id="end" hidden>Больше постов нет</p>
+
+      <p class="status__item status__empty" id="empty" hidden>Совпадений не найдено</p>
+    </div>
+  </main>
+
+</body>
+</html>
